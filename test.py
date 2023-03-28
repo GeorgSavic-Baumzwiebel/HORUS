@@ -9,8 +9,9 @@ import winrm
 
 
 def change_boot_priority(ip_address):
-    session = winrm.Session('10.0.0.9', auth=("junioradmin", "junioradmin"))
-    run = session.run_cmd('hostname') # to be finished
+    session = winrm.Session(ip_address, auth=("security", "security"))
+    run = session.run_cmd('hostname')
+    return run.std_out
 
 
 
@@ -23,4 +24,4 @@ def multiple_hosts(filename):
         trustedhosts(line)
         change_boot_priority(line)
 
-
+print(change_boot_priority('10.0.76.6'))
