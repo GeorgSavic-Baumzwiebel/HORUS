@@ -1,0 +1,3 @@
+pywinrm~=0.4.3
+pdoc~=13.0.1
+setuptools~=67.6.1
