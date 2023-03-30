@@ -9,7 +9,7 @@ import pdoc
 
 def change_boot_priority(ip_address,system):
     """
-    this function is used to change the boot priority of a given host
+    This function is used to change the boot priority of a given host
     It works by opening up a winrm session with the remote host and then sending ps commands to it to change the boot priority.
     following that it restarts the system with the "shutdown /r /t 0" command.
     :param ip_address: The IP address of the remote host
@@ -26,7 +26,7 @@ def change_boot_priority(ip_address,system):
 
 def trustedhosts(ip_address):
     """
-    this function is used to add a speficied ip address to the list of trusted hosts
+    This function is used to add a speficied ip address to the list of trusted hosts
     :param ip_address: The IP address to add to the trusted host file on this machine
     :return: nothing
     """
