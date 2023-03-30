@@ -4,6 +4,7 @@
 
 import subprocess
 import winrm
+import pdoc
 
 
 def change_boot_priority(ip_address,system):
