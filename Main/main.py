@@ -6,6 +6,7 @@ import subprocess
 import winrm
 import pdoc
 import time
+from wakeonlan import send_magic_packet
 
 
 def change_boot_priority(ip_address, system):
@@ -42,13 +43,16 @@ def multiple_hosts(filename):
     :param filename: The file name containing the remote hosts seperated by line breaks containing one ip per line
     :return: nothing
     """
-    file = open(filename)
-    args = {x.strip() for x in file.readlines()}
+    args = {x.strip() for x in open(filename,"r").readlines()}
     pool = Pool()
     pool.map(trustedhosts, args, chunksize=10)
     time.sleep(1)
 
 
+def wake_up_hosts(filename):
+    file = {x.strip() for x in open(filename,"r").readlines()}
+    for line in file:
+        send_magic_packet(line)
 
 if __name__ == '__main__':
-    multiple_hosts("ip_addresses.txt")
+    wake_up_hosts("ip_addresses.txt")
