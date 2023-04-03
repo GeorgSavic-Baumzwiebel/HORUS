@@ -50,6 +50,12 @@ def multiple_hosts(filename):
 
 
 def wake_up_hosts(filename):
+    """
+    This functions wakes up all hosts specifies in the filename provided. This function only works if the specified
+    hosts has been configured to wake up on magic packets
+    :param filename: The filename containing the MAC-Addresses
+    of the hosts to wake up :return: nothing
+    """
     file = {x.strip() for x in open(filename,"r").readlines()}
     for line in file:
         send_magic_packet(line)
