@@ -9,7 +9,7 @@ import time
 from wakeonlan import send_magic_packet
 
 
-def change_boot_priority(ip_address, system):
+def change_boot_priority(ip_address, system, username, password):
     """
     This function is used to change the boot priority of a given host
     It works by opening up a winrm session with the remote host and then sending ps commands to it to change the boot priority.
@@ -18,7 +18,7 @@ def change_boot_priority(ip_address, system):
     :param system: the subsystem description to change to
     :return: the GUID of the remote host
     """
-    session = winrm.Session(ip_address, auth=("junioradmin", "junioradmin"))
+    session = winrm.Session(ip_address, auth=(username, password))
     run = session.run_ps(
         f"bcdedit | Select-String '{system}' -Context 3,0 | ForEach-Object {{ $_.Context.PreContext[0] -replace '^identifier +\' }}")
     id = str(run.std_out)[2:-5]
