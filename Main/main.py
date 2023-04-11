@@ -27,14 +27,17 @@ def change_boot_priority(ip_address, system, username, password):
     return id
 
 
-def trustedhosts(ip_address):
+def trustedhosts(ip_address, username, password):
     """
     This function is used to add a speficied ip address to the list of trusted hosts
+    :param username: name of user in currently active system (i.e. junioradmin, wartungsclient)
+    :param password: password of user in currently active system
     :param ip_address: The IP address to add to the trusted host file on this machine
     :return: nothing
     """
-    subprocess.run(
-        f"powershell Set-Item WSMan:\localhost\Client\TrustedHosts -Value '{ip_address}' -Concatenate -Force")
+    session = winrm.Session(ip_address, auth=(username, password))
+    run = session.run_ps("powershell Set-Item WSMan:\localhost\Client\TrustedHosts -Value '{ip_address}' -Concatenate -Force")
+    return run
 
 
 def multiple_hosts(filename):
