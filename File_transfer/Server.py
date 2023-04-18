@@ -2,7 +2,7 @@ import socket
 import tqdm
 import os
 # device's IP address
-SERVER_HOST = "10.0.0.179"
+SERVER_HOST = socket.gethostbyname(socket.gethostname())
 SERVER_PORT = 5001
 # receive 4096 bytes each time
 BUFFER_SIZE = 4096
@@ -17,7 +17,7 @@ s.bind((SERVER_HOST, SERVER_PORT))
 
 
 # enabling our server to accept connections
-# 5 here is the number of unaccepted connections that
+# 5 here is the number of accepted connections that
 # the system will allow before refusing new connections
 s.listen(5)
 print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
@@ -31,9 +31,9 @@ print(f"[+] {address} is connected.")
 # receive using client socket, not server socket
 received = client_socket.recv(BUFFER_SIZE).decode()
 filename, filesize = received.split(SEPARATOR)
-# remove absolute path if there is
+# remove absolute path if there is one
 filename = os.path.basename(filename)
-# convert to integer
+# convert to int
 filesize = int(filesize)
 
 # start receiving the file from the socket

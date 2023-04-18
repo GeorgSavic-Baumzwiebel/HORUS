@@ -1,4 +1,7 @@
 import socket
+import tkinter
+from tkinter import filedialog
+import ctypes
 import tqdm
 import os
 
@@ -9,10 +12,15 @@ BUFFER_SIZE = 4096  # send 4096 bytes each time step
 host = "10.0.0.179"
 # the port, let's use 5001
 port = 5001
+# with ctypes with can increase the DPI of the window and therefore increase resolution
+ctypes.windll.shcore.SetProcessDpiAwareness(1)
+root = tkinter.Tk()
+root.withdraw()
 # the name of file we want to send, make sure it exists
-filename = "C:\\Users\\junioradmin\\Desktop\\pi.txt"
+filename = tkinter.filedialog.askopenfilename()
 # get the file size
 filesize = os.path.getsize(filename)
+print(f"File: {filename} selected")
 
 # create the client socket
 s = socket.socket()
@@ -30,7 +38,7 @@ with open(filename, "rb") as f:
         if not bytes_read:
             # file transmitting is done
             break
-        # we use sendall to assure transimission in
+        # we use sendall to assure transmission is sent
         # busy networks
         s.sendall(bytes_read)
         # update the progress bar
