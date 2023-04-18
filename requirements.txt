@@ -1,3 +1,6 @@
 pywinrm~=0.4.3
 pdoc~=13.0.1
 setuptools~=67.6.1
+wakeonlan~=3.0.0
+tqdm~=4.65.0
+Django~=4.2
