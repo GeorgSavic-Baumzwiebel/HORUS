@@ -1,6 +1,7 @@
 """
 30.03.2023
 """
+import os
 from multiprocessing import Pool, freeze_support
 import subprocess
 import winrm
@@ -63,5 +64,7 @@ def wake_up_hosts(filename):
     for line in file:
         send_magic_packet(line)
 
+def check_status(ip):
+    return True if os.system("ping -c 1 " + ip) is 0 else False
 if __name__ == '__main__':
     wake_up_hosts("ip_addresses.txt")
