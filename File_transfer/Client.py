@@ -1,39 +1,44 @@
 import socket
+
 import tqdm
 import os
-
+# device's IP address
+SERVER_HOST = socket.gethostbyname(socket.gethostname())
+SERVER_PORT = 5001
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096  # send 4096 bytes each time step
+BUFFER_SIZE = 4096
 
-# the ip address or hostname of the server, the receiver
-host = "10.0.0.179"
-# the port, let's use 5001
-port = 5001
-# the name of file we want to send, make sure it exists
-filename = "C:\\Users\\junioradmin\\Desktop\\pi.txt"
-# get the file size
-filesize = os.path.getsize(filename)
-
-# create the client socket
 s = socket.socket()
+s.bind((SERVER_HOST, SERVER_PORT))
+s.listen(3)
+print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+client_socket, address = s.accept()
+print(f"[+] Getting message from{address}")
 
-print(f"[+] Connecting to {host}:{port}")
-s.connect((host, port))
-print("[+] Connected.")
+# receive the file infos
+# receive using client socket, not server socket
+received = client_socket.recv(BUFFER_SIZE).decode()
+filename, filesize = received.split(SEPARATOR)
+# remove absolute path if there is
+# filename = os.path.basename(filename)
+# convert to integer
+filesize = int(filesize)
 
-# start sending the file
-progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-with open(filename, "rb") as f:
+# start receiving the file from the socket and write it down
+progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+with open(filename, "wb") as f:
     while True:
-        # read the bytes from the file
-        bytes_read = f.read(BUFFER_SIZE)
+        # read 1024 bytes from the socket (receive)
+        bytes_read = client_socket.recv(BUFFER_SIZE)
         if not bytes_read:
             # file transmitting is done
             break
-        # we use sendall to assure transimission in
-        # busy networks
-        s.sendall(bytes_read)
+        # write to the file the bytes we just received
+        f.write(bytes_read)
         # update the progress bar
         progress.update(len(bytes_read))
-# close the socket
+
+# close the client socket
+client_socket.close()
+# close the server socket
 s.close()

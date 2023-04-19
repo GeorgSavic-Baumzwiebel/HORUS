@@ -1,0 +1,23 @@
+﻿$IPAddress = (Get-NetIPAddress -AddressFamily IPV4 -InterfaceAlias Wlan).IPAddress
+Set-Content -Path C:\Users\Security\Appdata\Roaming\GNS3\2.2\gns3_server.ini -Value "[Server]
+path = C:\Program Files\GNS3\gns3server.EXE
+ubridge_path = C:\Program Files\GNS3\ubridge.EXE
+host = ${IPAddress}
+port = 3080
+images_path = C:\Users\security\GNS3\images
+projects_path = C:\Users\security\GNS3\projects
+appliances_path = C:\Users\security\GNS3\appliances
+additional_images_paths = 
+symbols_path = C:\Users\security\GNS3\symbols
+configs_path = C:\Users\security\GNS3\configs
+report_errors = True
+auto_start = True
+allow_console_from_anywhere = False
+auth = False
+user = admin
+password = S2AEnTJvxtxrV1eWredm4aNge57T0N7cDCnSkSpvse7RsaMetcMmU2ZoDzdCtQOo
+protocol = http
+console_start_port_range = 5000
+console_end_port_range = 10000
+udp_start_port_range = 10000
+udp_end_port_range = 20000"
