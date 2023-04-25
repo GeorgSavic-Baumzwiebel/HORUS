@@ -1,17 +1,31 @@
 import socket
-
 import tqdm
-import os
+
 # device's IP address
-SERVER_HOST = socket.gethostbyname(socket.gethostname())
+# Loop through the interfaces and find the first Ethernet interface
+def get_ethernet_ip():
+    # Get a list of all network interfaces
+    interfaces = socket.getaddrinfo(socket.gethostname(), None)
+
+    # Loop through the interfaces and find the first Ethernet interface
+    for interface in interfaces:
+        if interface[0] == socket.AF_INET and 'Ethernet' in interface[1][0]:
+            # Return the IP address of the Ethernet interface
+            return interface[4][0]
+
+    # Return None if no Ethernet interface was found
+    return None
+
+
+CLIENT_HOST = get_ethernet_ip()
 SERVER_PORT = 5001
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096
 
 s = socket.socket()
-s.bind((SERVER_HOST, SERVER_PORT))
+s.bind((CLIENT_HOST, SERVER_PORT))
 s.listen(3)
-print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+print(f"[*] Listening as {CLIENT_HOST}:{SERVER_PORT}")
 client_socket, address = s.accept()
 print(f"[+] Getting message from{address}")
 
