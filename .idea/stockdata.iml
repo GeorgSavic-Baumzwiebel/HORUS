@@ -21,5 +21,12 @@
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/HorusWebInterface/templates" />
+        <option value="$MODULE_DIR$/HorusWebInterface/templates/site" />
+        <option value="$MODULE_DIR$/HorusWebInterface/static" />
+      </list>
+    </option>
   </component>
 </module>

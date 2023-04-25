@@ -64,7 +64,10 @@ def wake_up_hosts(filename):
     for line in file:
         send_magic_packet(line)
 
+
 def check_status(ip):
-    return True if os.system("ping -c 1 " + ip) is 0 else False
+    return True if os.system("ping -c 1 " + ip) == 0 else False
+
+
 if __name__ == '__main__':
     wake_up_hosts("ip_addresses.txt")
