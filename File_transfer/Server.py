@@ -17,27 +17,27 @@ root.withdraw()
 filename = tkinter.filedialog.askopenfilename()
 filesize = os.path.getsize(filename)
 
-# creating the socket
 print("[+] Waiting . . .")
-# send to all devices in our list
+# send to all ips in our list
 for a in host:
     s = socket.socket()
     s.connect((a, port))
     print(f"[*] Sending to {a}:{port}")
 
-    # Sending the filename and filesize, seperated by a junk message
+    # Sending the filename and filesize, separated by a junk message separator
     s.send(f"{filename}{SEPARATOR}{filesize}".encode())
-    # Progress bar of transfer
+    # Progress bar of transfer, tqdm == <3
     progress = tqdm.tqdm(range(filesize), f"Sending {filename} to {a}", unit="B", unit_scale=True, unit_divisor=1024)
     with open(filename, "rb") as f:
         while True:
-            # read the bytes from the file into a buffer
+            # read bytes from the file into a buffer
             bytes_read = f.read(BUFFER_SIZE)
             if not bytes_read:
                 # file transmitting is done
                 break
-            #send the buffer
+            # send the buffer
             s.sendall(bytes_read)
             # update the progress bar
             progress.update(len(bytes_read))
-    s.close()
+# Close the socket after all ips have had the file transferred
+s.close()

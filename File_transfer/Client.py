@@ -13,6 +13,7 @@ def get_ethernet_ip():
     # Return IP
     return interfaces[0]
 
+# Client IP to listen on
 CLIENT_HOST = get_ethernet_ip()
 # Port to run the socket on
 SERVER_PORT = 5001
