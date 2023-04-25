@@ -6,16 +6,17 @@ import tqdm
 def get_ethernet_ip():
     # Get a list of all network interfaces
     interfaces = socket.getaddrinfo(socket.gethostname(), None)
-
-    # Loop through the interfaces and find the first Ethernet interface
+    # Loop through the interfaces and find the third IPv4 Ethernet interface
+    counter = 1
     for interface in interfaces:
-        if interface[0] == socket.AF_INET and 'Ethernet' in interface[1][0]:
+        # when interface has a IPv4 address add 1 to counter
+        if interface[0] == socket.AF_INET:
+            counter += 1
+        if interface[0] == socket.AF_INET and counter == 3:
             # Return the IP address of the Ethernet interface
             return interface[4][0]
-
-    # Return None if no Ethernet interface was found
-    return None
-
+    # throw Exception
+    raise Exception("No Ethernet found")
 
 CLIENT_HOST = get_ethernet_ip()
 SERVER_PORT = 5001
