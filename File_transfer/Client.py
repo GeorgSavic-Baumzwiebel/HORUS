@@ -1,22 +1,17 @@
 import socket
 import tqdm
+import re
 
 # device's IP address
 # Loop through the interfaces and find the first Ethernet interface
 def get_ethernet_ip():
     # Get a list of all network interfaces
+    regex = re.compile(r'10.0.76.\d')
     interfaces = socket.getaddrinfo(socket.gethostname(), None)
-    # Loop through the interfaces and find the third IPv4 Ethernet interface
-    counter = 1
-    for interface in interfaces:
-        # when interface has a IPv4 address add 1 to counter
-        if interface[0] == socket.AF_INET:
-            counter += 1
-        if interface[0] == socket.AF_INET and counter == 3:
-            # Return the IP address of the Ethernet interface
-            return interface[4][0]
-    # throw Exception
-    raise Exception("No Ethernet found")
+    # Filter to all that match regex(should be 1)
+    interfaces = [interface[4][0] for interface in interfaces if bool(regex.match(interface[4][0]))]
+    # Loop through the interfaces and find the first Ethernet interface
+    return interfaces[0]
 
 CLIENT_HOST = get_ethernet_ip()
 SERVER_PORT = 5001
