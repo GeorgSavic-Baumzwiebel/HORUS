@@ -1,0 +1,46 @@
+GNSkript ist eine Software, welche das Speichern und Laden von GNS3 Topologien und Konfigs ermöglicht. 
+Speichert man seine Topologie mit GNSkript bleibt die Konfiguration erhalten, selbst wenn man nicht den write
+Befehl angewendet hat. 
+
+Zur Installation genügt das Herunterladen des nötigen Skripts (skript.py) und optional des GUIs (gui.py).
+
+Beispielszenario: Man hat eine Topologie in GNS3 und möchte an einem späteren Zeitpunkt an dieser weiterarbeiten. 
+
+
+Durchführung im GUI: 
+
+Dafür führt man die 
+Datei gui.py aus. 
+In dem ersten Dropdown Menü "Action" wählt man die gewünschte Aktion (Load oder Save). 
+Im zweiten Feld (PATH) trägt man den Pfad des seiner von GNSkript gespeicherten Konfig Dateien an, welche man in sein Projekt laden möchte.
+Im dritten Feld (PROJECT NAME) wird der Name (nicht Pfad!) des GNS3 Projekts eingegeben, in welches man die gespeicherte Topologie hineinladen will. 
+In das letzte Feld (VMHOST) gbit man die IP Adresse des VMHosts ein (in der Regel 10.0.76.X+60 oder 10.0.61.X+60, X steht in diesem Fall für die Arbeitsplatznummer des PCs im Labor).
+
+Die Box "Start Nodes", wenn gesetzt, sorgt dafür, dass die Nodes (Geräte in GNS3) automatisch gestartet werden. 
+
+Die Box "Configure Nodes", wenn gesetzt, sorgt dafür, dass die Nodes automatisch mit der angegeben Konfig Datei
+konfiguriert werden. Ist diese nicht gesetzt, werden die Maschinen lediglich platziert und verkabelt, jedoch nicht
+konfiguriert!
+
+
+Durchführung auf der Kommandozeile:
+
+Zum Speichern der Konfiguration:
+python3 ./skript.py -save "C:/Users/Alexander/GNS3/projects/gnscripttest" -project gnscripttest -vmhost 192.168.152.128
+
+Erklärung des Befehls:
+python3 ./skript.py					-ruft das Skript auf
+-save							-wählt die Aktion aus, welche vom Skript ausgeführt werden soll (save/load)
+"C:/Users/Alexander/GNS3/projects/gnscripttest"		-gibt den Pfad an, unter dem die Konfig Dateien gespeichert werden sollen
+-project gnscripttest					-gibt den Namen des Projects an, von welchem die Topologie gespeichert werden soll
+-vmhost 192.168.152.128					-gibt die IP-Adresse der GNS3-VM an (in der Regel 10.0.76.X+60 oder 10.0.61.X+60, X steht in diesem Fall für die Arbeitsplatznummer des PCs im Labor)
+
+Zum Laden der Konfiguration:
+python3 ./skript.py -load "C:/Users/Alexander/GNS3/projects/gnscripttest" -project Gurkensaft -vmhost 192.168.152.128 -start -configure
+
+Erklärung des Befehls:
+python3 ./skript.py					-ruft das Skript auf
+-load   						-wählt die Aktion aus, welche vom Skript ausgeführt werden soll (save/load)
+"C:/Users/Alexander/GNS3/projects/gnscripttest"		-gibt den Pfad an, der zu den Konfig Dateien führt, welche geladen werden sollen
+-project gnscripttest					-gibt den Namen des Projects an, von welchem die Topologie gespeichert werden soll
+-vmhost 192.168.152.128					-gibt die IP-Adresse der GNS3-VM an (in der Regel 10.0.76.X+60 oder 10.0.61.X+60, X steht in diesem Fall für die Arbeitsplatznummer des PCs im Labor)
