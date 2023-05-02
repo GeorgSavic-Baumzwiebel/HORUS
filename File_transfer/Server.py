@@ -32,6 +32,7 @@ print("[+] Waiting for connection . . .")
 # send to all ips in our list
 for a in host:
     s = socket.socket()
+    # Try to connect and send some data to check the connection
     try:
         s.connect((a, port))
         print(f"[*] Sending to {a}:{port}")
