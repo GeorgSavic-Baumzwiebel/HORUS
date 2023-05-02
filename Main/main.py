@@ -1,8 +1,6 @@
 """
 30.03.2023
 """
-import json
-import os
 from multiprocessing import Pool, freeze_support
 import subprocess
 import winrm
@@ -29,18 +27,14 @@ def change_boot_priority(ip_address, system, username, password):
     return id
 
 
-def trustedhosts(ip_address, username, password):
+def trustedhosts(ip_address):
     """
     This function is used to add a speficied ip address to the list of trusted hosts
-    :param username: name of user in currently active system (i.e. junioradmin, wartungsclient)
-    :param password: password of user in currently active system
     :param ip_address: The IP address to add to the trusted host file on this machine
     :return: nothing
     """
-    session = winrm.Session(ip_address, auth=(username, password))
-    run = session.run_ps(
-        "powershell Set-Item WSMan:\localhost\Client\TrustedHosts -Value '{ip_address}' -Concatenate -Force")
-    return run
+    subprocess.run(
+        f"powershell Set-Item WSMan:\localhost\Client\TrustedHosts -Value '{ip_address}' -Concatenate -Force")
 
 
 def multiple_hosts(filename):
@@ -59,18 +53,12 @@ def wake_up_hosts(filename):
     """
     This functions wakes up all hosts specifies in the filename provided. This function only works if the specified
     hosts has been configured to wake up on magic packets
-    :param filename: The json file containing the MAC-Addresses of the hosts to wake up
-    :return: nothing
+    :param filename: The filename containing the MAC-Addresses
+    of the hosts to wake up :return: nothing
     """
-    with open(filename) as file:
-        file = json.load(file)
-        file = [a['mac'] for a in file['pcs'] if not a['status']]
+    file = {x.strip() for x in open(filename, "r").readlines()}
     for line in file:
         send_magic_packet(line)
-
-
-def check_status(ip):
-    return True if os.system("ping -c 1 " + ip) == 0 else False
 
 
 if __name__ == '__main__':
