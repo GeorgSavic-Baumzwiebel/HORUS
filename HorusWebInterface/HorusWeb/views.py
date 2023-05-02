@@ -13,7 +13,7 @@ def index(request):
         with open('PCs.json', 'r') as f:
             data = json.loads(f.read().replace('\n', ''))
         table = list()
-        for pc in data["pcs"]:
+        for counter, pc in enumerate(data["pcs"]):
             ip = pc['ip']
             mac = pc['mac']
             number = pc['number']
@@ -22,6 +22,7 @@ def index(request):
             table.append(mac)
             table.append(ip)
             table.append(status)
+            table.append(counter + 1)
         context = {
             'results': table,
         }

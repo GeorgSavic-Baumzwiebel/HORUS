@@ -26,6 +26,7 @@
         <option value="$MODULE_DIR$/HorusWebInterface/templates" />
         <option value="$MODULE_DIR$/HorusWebInterface/templates/site" />
         <option value="$MODULE_DIR$/HorusWebInterface/static" />
+        <option value="$MODULE_DIR$/HorusWebInterface/HorusWeb/templatetags" />
       </list>
     </option>
   </component>

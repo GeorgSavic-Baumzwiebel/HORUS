@@ -1,6 +1,9 @@
+{% load HorusWeb_extras %}
+{% load HorusWeb_extras %}
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
+    {% load HorusWeb_extras %}
     {% load unicorn %}
     {% load bootstrap5 %}
     {% bootstrap_css %}
@@ -15,18 +18,8 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
 
     <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+        .hiddenrow {
+            padding: 0 !important;
         }
     </style>
 
@@ -70,10 +63,34 @@
                     </thead>
                     <tbody>
                     {% for r in results %}
-                        {% cycle '<tr>' '' '' '' %}
-                        <td>{{ r }}</td>
-                        {% cycle '' '' '' '</tr>' %}
+                        {% autoescape off %}
+                            {% with "<tr  data-bs-toggle='collapse'  role='button' data-bs-target='#pc_"|addstr:r|addstr:"'>" as row %}
+                                {% if forloop.counter0|divisibleby:4 %}
+                                    {% update_variable "<tr data-bs-toggle='collapse'  role='button' data-bs-target='#pc_"|addstr:r|addstr:"'>" as row %}
+                                {% endif %}
+                                {% if forloop.counter0|add:1|divisibleby:5 and forloop.counter0 != 0 %}
+                                    <tr>
+                                        <td colspan="12" class="hiddenrow">
+                                            <div class="collapse" id="pc_{{ r }}">
+                                                <table class="table">
+                                                    <tr>
+                                                        <td>
+                                                            {% unicorn 'reboothost' pcnumber=r %}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    {% cycle row '' '' '' %}
+                                    <td>{{ r }}</td>
+                                    {% cycle  '' '' '' '</tr>' %}
+                                {% endif %}
+                            {% endwith %}
+                        {% endautoescape %}
                     {% endfor %}
+
                     </tbody>
                 </table>
             </div>
