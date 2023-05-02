@@ -38,7 +38,8 @@ def trustedhosts(ip_address, username, password):
     :return: nothing
     """
     session = winrm.Session(ip_address, auth=(username, password))
-    run = session.run_ps("powershell Set-Item WSMan:\localhost\Client\TrustedHosts -Value '{ip_address}' -Concatenate -Force")
+    run = session.run_ps(
+        "powershell Set-Item WSMan:\localhost\Client\TrustedHosts -Value '{ip_address}' -Concatenate -Force")
     return run
 
 
@@ -48,7 +49,7 @@ def multiple_hosts(filename):
     :param filename: The file name containing the remote hosts seperated by line breaks containing one ip per line
     :return: nothing
     """
-    args = {x.strip() for x in open(filename,"r").readlines()}
+    args = {x.strip() for x in open(filename, "r").readlines()}
     pool = Pool()
     pool.map(trustedhosts, args, chunksize=10)
     time.sleep(1)
@@ -63,7 +64,7 @@ def wake_up_hosts(filename):
     """
     with open(filename) as file:
         file = json.load(file)
-        file = [a['mac'] for a in file['pcs']]
+        file = [a['mac'] for a in file['pcs'] if not a['status']]
     for line in file:
         send_magic_packet(line)
 
