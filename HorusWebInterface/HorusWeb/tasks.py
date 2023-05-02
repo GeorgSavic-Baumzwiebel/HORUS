@@ -1,6 +1,6 @@
 import json
 
-from background_task import background
+
 # from celery import shared_task
 
 from Main.main import check_status

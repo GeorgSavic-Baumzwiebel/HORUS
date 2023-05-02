@@ -1,9 +1,9 @@
 pywinrm~=0.4.3
-pdoc==13.1.0
-setuptools~=67.6.1
+pdoc==13.1.1
+setuptools==67.7.2
 wakeonlan~=3.0.0
 tqdm~=4.65.0
 Django~=4.2
-
 future~=0.18.2
 celery~=5.2.7
+django-bootstrap-v5~=1.0.11
