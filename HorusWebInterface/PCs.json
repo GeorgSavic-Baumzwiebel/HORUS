@@ -4,12 +4,14 @@
       "ip": "192.168.225.50",
       "mac": "00:11:22:33:44:55",
       "number": 1,
+      "System": "Windows",
       "status": false
     },
     {
       "ip": "10.0.76.6",
       "mac": "00:11:22:33:44:55",
       "number": 2,
+      "System": "Windows",
       "status": false
     }
   ]
