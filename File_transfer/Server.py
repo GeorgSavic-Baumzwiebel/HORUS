@@ -6,15 +6,17 @@ import tqdm
 import os
 import json
 
-SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096
 
 # Get Ips from webserver Json file
 def read_ips(file):
     with open(file) as file:
         file = json.load(file)
-        file = [ a['ip'] for a in file['pcs']]
+        file = [a['ip'] for a in file['pcs']]
     return file
+
+
+SEPARATOR = "<SEPARATOR>"
+BUFFER_SIZE = 4096
 
 host = read_ips('../HorusWebInterface/PCs.json')
 port = 5001
@@ -26,15 +28,22 @@ root.withdraw()
 filename = tkinter.filedialog.askopenfilename()
 filesize = os.path.getsize(filename)
 
-print("[+] Waiting . . .")
+print("[+] Waiting for connection . . .")
 # send to all ips in our list
 for a in host:
     s = socket.socket()
-    s.connect((a, port))
-    print(f"[*] Sending to {a}:{port}")
+    try:
+        s.connect((a, port))
+        print(f"[*] Sending to {a}:{port}")
 
-    # Sending the filename and filesize, separated by a junk message separator
-    s.send(f"{filename}{SEPARATOR}{filesize}".encode())
+        # Sending the filename and filesize, separated by a junk message separator
+        s.send(f"{filename}{SEPARATOR}{filesize}".encode())
+    # Catch Socket Error
+    except socket.error as err:
+        print(f'Socket error on {a}:\n', err)
+        # Continue sending to other hosts, we don't need to crash because of one error
+        continue
+
     # Progress bar of transfer, tqdm == <3
     progress = tqdm.tqdm(range(filesize), f"Sending {filename} to {a}", unit="B", unit_scale=True, unit_divisor=1024)
     with open(filename, "rb") as f:
