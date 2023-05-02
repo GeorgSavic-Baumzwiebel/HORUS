@@ -1,9 +1,12 @@
 """
 30.03.2023
 """
+import json
+import os
 from multiprocessing import Pool, freeze_support
 import subprocess
 import winrm
+import pdoc
 import time
 from wakeonlan import send_magic_packet
 
@@ -25,6 +28,21 @@ def change_boot_priority(ip_address, system, username, password):
     session.run_ps("shutdown /r /t 0")
     return id
 
+def check_OperatingSystem(ip_address, possible_accounts: list[dict]):
+    """
+    This function is used to get the operating system of the remote host
+    :param ip_address: The IP of the Host to check
+    :param possible_accounts: list of possible account names with their password and respective
+    Operating System params: username, password, OS
+    :return: The Operating System running on the specified host
+    """
+    for account in possible_accounts:
+        session = winrm.Session(ip_address,auth=(account.get("username"), account.get("password")))
+        try:
+            session.run_cmd("ipconfig")
+        except winrm.exceptions.InvalidCredentialsError:
+            continue
+        return account.get("OS")
 
 def trustedhosts(ip_address):
     """
@@ -52,13 +70,29 @@ def wake_up_hosts(filename):
     """
     This functions wakes up all hosts specifies in the filename provided. This function only works if the specified
     hosts has been configured to wake up on magic packets
-    :param filename: The filename containing the MAC-Addresses
-    of the hosts to wake up :return: nothing
+    :param filename: The json file containing the MAC-Addresses of the hosts to wake up
+    :return: nothing
     """
-    file = {x.strip() for x in open(filename, "r").readlines()}
+    with open(filename) as file:
+        file = json.load(file)
+        file = [a['mac'] for a in file['pcs'] if not a['status']]
     for line in file:
         send_magic_packet(line)
 
 
+def check_status(ip):
+    """
+    This function checks if the specified host (by IP) is currently running
+    :param ip: The IP address to check
+    :return: True if the host is currently running, False otherwise
+    """
+    return True if os.system("ping -c 1 " + ip) == 0 else False
+
+
 if __name__ == '__main__':
-    wake_up_hosts("ip_addresses.txt")
+    dictionary = {
+        "username": "junioradmin",
+        "password": "junioradmin",
+        "OS": "tes123"
+    }
+    print(check_OperatingSystem("10.0.76.24", [dictionary]))
