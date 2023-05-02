@@ -4,7 +4,6 @@
 from multiprocessing import Pool, freeze_support
 import subprocess
 import winrm
-import pdoc
 import time
 from wakeonlan import send_magic_packet
 
