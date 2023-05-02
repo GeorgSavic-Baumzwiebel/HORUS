@@ -4,10 +4,19 @@ from tkinter import filedialog
 import ctypes
 import tqdm
 import os
+import json
 
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096
-host = ["192.168.0.1", "192.168.0.1"]
+
+# Get Ips from webserver Json file
+def read_ips(file):
+    with open(file) as file:
+        file = json.load(file)
+        file = [ a['ip'] for a in file['pcs']]
+    return file
+
+host = read_ips('../HorusWebInterface/PCs.json')
 port = 5001
 # with ctypes we can increase the DPI of the window and therefore increase resolution
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
