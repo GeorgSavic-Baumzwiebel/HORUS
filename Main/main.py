@@ -1,6 +1,7 @@
 """
 30.03.2023
 """
+import json
 import os
 from multiprocessing import Pool, freeze_support
 import subprocess
@@ -57,10 +58,12 @@ def wake_up_hosts(filename):
     """
     This functions wakes up all hosts specifies in the filename provided. This function only works if the specified
     hosts has been configured to wake up on magic packets
-    :param filename: The filename containing the MAC-Addresses
-    of the hosts to wake up :return: nothing
+    :param filename: The json file containing the MAC-Addresses of the hosts to wake up
+    :return: nothing
     """
-    file = {x.strip() for x in open(filename,"r").readlines()}
+    with open(filename) as file:
+        file = json.load(file)
+        file = [a['mac'] for a in file['pcs']]
     for line in file:
         send_magic_packet(line)
 
