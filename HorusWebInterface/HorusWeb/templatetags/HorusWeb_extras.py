@@ -18,3 +18,14 @@ def update_variable(value):
 @register.filter
 def divide(arg1, arg2):
     return arg1 / arg2
+
+@register.filter
+def mult(arg1, arg2):
+    return arg1 * arg2
+
+@register.filter
+def return_item(l, i):
+    try:
+        return l[int(i)]
+    except:
+        return None

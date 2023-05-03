@@ -21,6 +21,10 @@
         .hiddenrow {
             padding: 0 !important;
         }
+
+        .hiddentable {
+            margin-bottom: 0px !important;
+        }
     </style>
 
 
@@ -59,6 +63,7 @@
                         <th scope="col">MAC</th>
                         <th scope="col">IP</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Current System</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -68,11 +73,11 @@
                                 {% if forloop.counter0|divisibleby:4 %}
                                     {% update_variable "<tr data-bs-toggle='collapse'  role='button' data-bs-target='#pc_"|addstr:r|addstr:"'>" as row %}
                                 {% endif %}
-                                {% if forloop.counter0|add:1|divisibleby:5 and forloop.counter0 != 0 %}
+                                {% if forloop.counter0|add:1|divisibleby:6 and forloop.counter0 != 0 %}
                                     <tr>
                                         <td colspan="12" class="hiddenrow">
                                             <div class="collapse" id="pc_{{ r }}">
-                                                <table class="table">
+                                                <table class="table hiddentable">
                                                     <tr>
                                                         <td>
                                                             {% unicorn 'reboothost' pcnumber=r %}
@@ -83,9 +88,24 @@
                                         </td>
                                     </tr>
                                 {% else %}
-                                    {% cycle row '' '' '' %}
-                                    <td>{{ r }}</td>
-                                    {% cycle  '' '' '' '</tr>' %}
+                                    {% cycle row '' '' '' '' %}
+                                    <td>
+                                        {% with forloop.counter0|add:3 as index %}
+                                            {% with "orange" as color %}
+                                                {% if results|return_item:index == "up" %}
+                                                    {% update_variable "#198754" as color %}
+                                                {% else %}
+                                                    {% update_variable "#dc3545" as color %}
+                                                {% endif %}
+                                                {% with '<svg data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="'|addstr:color|addstr:'" class="bi bi-pc-display" viewBox="0 0 16 16"> <path d="M8 1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V1Zm1 13.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Zm2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0ZM9.5 1a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5ZM9 3.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5ZM1.5 2A1.5 1.5 0 0 0 0 3.5v7A1.5 1.5 0 0 0 1.5 12H6v2h-.5a.5.5 0 0 0 0 1H7v-4H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5H7V2H1.5Z"/> </svg>' as icon %}
+                                                    {% cycle icon '' '' '' '' %}
+                                                {% endwith %}
+                                            {% endwith %}
+                                        {% endwith %}
+
+                                        {{ r }}
+                                    </td>
+                                    {% cycle '' '' '' '' '</tr>' %}
                                 {% endif %}
                             {% endwith %}
                         {% endautoescape %}

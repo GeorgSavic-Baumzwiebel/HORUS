@@ -18,10 +18,15 @@ def index(request):
             mac = pc['mac']
             number = pc['number']
             status = pc['status']
+            system = pc['system']
             table.append(number)
             table.append(mac)
             table.append(ip)
-            table.append(status)
+            if status:
+                table.append("up")
+            else:
+                table.append("down")
+            table.append(system)
             table.append(counter + 1)
         context = {
             'results': table,

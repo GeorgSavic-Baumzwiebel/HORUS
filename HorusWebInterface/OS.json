@@ -1,0 +1,14 @@
+{
+  "Operating_Systems" :[
+    {
+      "Systemname" : "Windows",
+      "UserName" : "admin",
+      "Password" : "admin"
+    },
+    {
+      "Systemname" : "GNS3-Security",
+      "UserName" : "security",
+      "Password" : "security"
+    }
+  ]
+}

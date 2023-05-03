@@ -12,4 +12,4 @@ def update_status():
         pc['status'] = check_status(pc['ip'])
     print(data)
     with open('PCs.json', 'w') as f:
-        json.dump(data, f)
+        json.dump(data, f,indent=4)

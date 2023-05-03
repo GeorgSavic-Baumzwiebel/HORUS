@@ -11,10 +11,10 @@ import time
 from wakeonlan import send_magic_packet
 
 
-def change_boot_priority(ip_address, system, username, password):
+def change_boot_order(ip_address, system, username, password):
     """
-    This function is used to change the boot priority of a given host
-    It works by opening up a winrm session with the remote host and then sending ps commands to it to change the boot priority.
+    This function is used to change the boot order of a given host
+    It works by opening up a winrm session with the remote host and then sending ps commands to it to change the boot order.
     following that it restarts the system with the "shutdown /r /t 0" command.
     :param ip_address: The IP address of the remote host
     :param system: the subsystem description to change to
@@ -79,6 +79,13 @@ def wake_up_hosts(filename):
     for line in file:
         send_magic_packet(line)
 
+def get_PC_by_number(pcnumber: int, filename: str):
+    with open(filename) as file:
+        file = json.load(file)
+        host = [a for a in file['pcs'] if int(a['number']) == pcnumber][0]
+    return host
+
+
 
 def check_status(ip):
     """
@@ -90,9 +97,4 @@ def check_status(ip):
 
 
 if __name__ == '__main__':
-    dictionary = {
-        "username": "junioradmin",
-        "password": "junioradmin",
-        "OS": "tes123"
-    }
-    print(check_OperatingSystem("10.0.76.24", [dictionary]))
+    print(get_PC_by_number(1,'../HorusWebInterface/PCs.json'))
