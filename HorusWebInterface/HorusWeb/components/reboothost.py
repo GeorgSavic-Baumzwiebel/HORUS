@@ -1,6 +1,7 @@
+import json
+
 from django_unicorn.components import UnicornView
 from Main.main import get_PC_by_number
-from Main.main import check_OperatingSystem
 from Main.main import change_boot_order
 from Main.main import wake_up_single_host
 
@@ -14,7 +15,13 @@ class ReboothostView(UnicornView):
         self.pc = get_PC_by_number(self.pcnumber)
 
     def reboot(self):
-        currentos = check_OperatingSystem(self.pc["ip"])
+        with open("../../OS.json") as f:
+            data = json.loads(f.read().replace('\n', ''))
+        systems = []
+        for i in data['Operating_Systems']:
+            if not i['Systemname'] == self.pc['system']:
+                systems += i
+        change_boot_order(self.pc['ip'],systems[0]['Systemname'],systems[0]['UserName'],systems[0]['Password'])
 
 
 

@@ -44,7 +44,7 @@ def check_OperatingSystem(ip_address: str):
             try:
                 session.run_cmd("ipconfig")
             except Exception:
-                continue
+                pass
             return system["Systemname"]
 
 
