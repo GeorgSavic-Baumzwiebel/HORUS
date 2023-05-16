@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_unicorn',
     'HorusWeb',
     'bootstrap5',
+    'HorusWeb.components.reboothost',
     'HorusWeb.components.update_PCs_json',
     'Main'
 ]

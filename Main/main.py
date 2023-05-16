@@ -28,7 +28,8 @@ def change_boot_order(ip_address, system, username, password):
     session.run_ps("shutdown /r /t 0")
     return id
 
-def check_OperatingSystem(ip_address, possible_accounts: list[dict]):
+
+def check_OperatingSystem(ip_address: str):
     """
     This function is used to get the operating system of the remote host
     :param ip_address: The IP of the Host to check
@@ -36,13 +37,16 @@ def check_OperatingSystem(ip_address, possible_accounts: list[dict]):
     Operating System params: username, password, OS
     :return: The Operating System running on the specified host
     """
-    for account in possible_accounts:
-        session = winrm.Session(ip_address,auth=(account.get("username"), account.get("password")))
-        try:
-            session.run_cmd("ipconfig")
-        except winrm.exceptions.InvalidCredentialsError:
-            continue
-        return account.get("OS")
+    with open("../HorusWebInterface/OS.json") as file:
+        file = json.load(file)
+        for system in file["Operating_Systems"]:
+            session = winrm.Session(ip_address, auth=(system["UserName"], system["Password"]))
+            try:
+                session.run_cmd("ipconfig")
+            except Exception:
+                continue
+            return system["Systemname"]
+
 
 def trustedhosts(ip_address):
     """
@@ -66,10 +70,11 @@ def multiple_hosts(filename):
     time.sleep(1)
 
 
-def wake_up_hosts(filename):
+def wake_up_hosts(filename: str):
     """
     This functions wakes up all hosts specifies in the filename provided. This function only works if the specified
     hosts has been configured to wake up on magic packets
+    :type filename: object
     :param filename: The json file containing the MAC-Addresses of the hosts to wake up
     :return: nothing
     """
@@ -79,12 +84,21 @@ def wake_up_hosts(filename):
     for line in file:
         send_magic_packet(line)
 
-def get_PC_by_number(pcnumber: int, filename: str):
-    with open(filename) as file:
+
+def wake_up_single_host(mac: str):
+    """
+    this function is used to wake up a single host
+    :param mac: A string representing the mac address to wake up
+    :return:
+    """
+    send_magic_packet(mac)
+
+
+def get_PC_by_number(pcnumber: int):
+    with open("../HorusWebInterface/PCs.json") as file:
         file = json.load(file)
         host = [a for a in file['pcs'] if int(a['number']) == pcnumber][0]
     return host
-
 
 
 def check_status(ip):
@@ -97,4 +111,4 @@ def check_status(ip):
 
 
 if __name__ == '__main__':
-    print(get_PC_by_number(1,'../HorusWebInterface/PCs.json'))
+    print(get_PC_by_number(1, '../HorusWebInterface/PCs.json'))
