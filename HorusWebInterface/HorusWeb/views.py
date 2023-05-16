@@ -31,8 +31,5 @@ def index(request):
         context = {
             'results': table,
         }
-        print(context)
-        for r in context.get('results'):
-            print(r)
         template = loader.get_template("site/index.html")
         return HttpResponse(template.render(context, request))

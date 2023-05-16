@@ -69,7 +69,6 @@ def multiple_hosts(filename):
     pool.map(trustedhosts, args, chunksize=10)
     time.sleep(1)
 
-
 def wake_up_hosts(filename: str):
     """
     This functions wakes up all hosts specifies in the filename provided. This function only works if the specified
