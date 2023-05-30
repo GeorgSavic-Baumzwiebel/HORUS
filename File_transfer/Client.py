@@ -43,7 +43,7 @@ if os.path.exists(filename):
 filesize = int(filesize)
 
 # start receiving the file from the socket and write it down
-with open(filename, "w") as f:
+with open(filename, "wb") as f:
     while True:
         # read 4096 bytes from the socket (receive)
         bytes_read = client_socket.recv(BUFFER_SIZE)
